@@ -1,0 +1,32 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1"><title>إدارة المستخدمين</title>
+<style>
+body{font-family:system-ui;background:#0b1329;color:#fff;margin:0;padding:25px}.wrap{max-width:1000px;margin:auto}
+.card{background:#1c2541;border-radius:16px;padding:22px;margin-bottom:20px}h1{color:#00b4d8}
+input,select,button{padding:11px;border-radius:9px;margin:4px}input,select{background:#0f1933;color:#fff;border:1px solid #fff2}
+button{border:0;background:#00b4d8;font-weight:700;cursor:pointer}.danger{background:#e06c75;color:#fff}
+table{width:100%;border-collapse:collapse}th,td{padding:10px;border-bottom:1px solid #fff2;text-align:right}
+a{color:#00b4d8}#msg{min-height:25px;color:#ffd166}
+</style></head><body><div class="wrap">
+<div class="card"><h1>إدارة مستخدمي المنصة</h1><p id="who"></p>
+<a href="/">العودة إلى المنصة</a> <button id="logout">تسجيل الخروج</button></div>
+<div class="card"><h2>إضافة مستخدم</h2><form id="add">
+<input id="u" placeholder="اسم المستخدم" required><input id="p" type="password" placeholder="كلمة المرور (8 أحرف على الأقل)" required>
+<select id="role"><option value="student">طالب</option><option value="admin">مدير</option></select><button>إضافة</button></form><div id="msg"></div></div>
+<div class="card"><h2>المستخدمون</h2><table><thead><tr><th>المستخدم</th><th>الصلاحية</th><th>الحالة</th><th>إجراء</th></tr></thead><tbody id="rows"></tbody></table></div>
+</div><script>
+async function load(){
+ const me=await fetch("/api/me").then(r=>r.json());
+ if(!me.authenticated||me.user.role!=="admin"){location.replace("/");return}
+ who.textContent="مسجل الدخول: "+me.user.username;
+ const users=await fetch("/api/users").then(r=>r.json());
+ rows.innerHTML=users.map(x=>`<tr><td>${x.username}</td><td>${x.role==="admin"?"مدير":"طالب"}</td><td>${x.active?"فعال":"موقوف"}</td><td>${x.username===me.user.username?"—":`<button onclick="toggle(${x.id},${x.active})">${x.active?"إيقاف":"تفعيل"}</button> <button class="danger" onclick="removeUser(${x.id})">حذف</button>`}</td></tr>`).join("");
+}
+add.onsubmit=async e=>{e.preventDefault();msg.textContent="";
+ const r=await fetch("/api/users",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({username:u.value,password:p.value,role:role.value})});
+ const d=await r.json();msg.textContent=d.error||"تمت إضافة المستخدم.";if(r.ok){u.value="";p.value="";load();}
+};
+async function toggle(id,active){await fetch("/api/users/"+id,{method:"PATCH",headers:{"Content-Type":"application/json"},body:JSON.stringify({active:!active})});load();}
+async function removeUser(id){if(confirm("حذف المستخدم؟")){await fetch("/api/users/"+id,{method:"DELETE"});load();}}
+logout.onclick=async()=>{await fetch("/api/logout",{method:"POST"});location.replace("/login.html")};load();
+</script></body></html>

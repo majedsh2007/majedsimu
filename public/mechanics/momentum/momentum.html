@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>الزخم الخطي والدفع | الأستاذ ماجد شلالدة</title>
+    <style>
+        :root {
+            --bg-color: #0b1329;
+            --main-card-bg: #1c2541;
+            --sub-card-bg: #3a506b;
+            --text-color: #ffffff;
+            --accent-cyan: #00b4d8;
+            --accent-blue: #4cc9f0;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* الشعار كعلامة مائية بالخلفية */
+        .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('https://squarespace-cdn.com');
+            background-size: 180px;
+            opacity: 0.02;
+            pointer-events: none;
+            z-index: 0;
+            transform: rotate(-15deg) scale(1.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--main-card-bg);
+            color: var(--accent-cyan);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            border: 1px solid var(--accent-cyan);
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background-color: var(--accent-cyan);
+            color: var(--bg-color);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--accent-blue);
+            margin-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        header p {
+            color: #a5a5a5;
+            font-size: 1.1rem;
+        }
+
+        .grid-layout {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .topic-card {
+            background-color: var(--main-card-bg);
+            border-radius: 14px;
+            padding: 25px;
+            text-decoration: none;
+            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-blue);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+        }
+
+        .topic-card .icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        .topic-card h2 {
+            margin: 0 0 12px 0;
+            font-size: 1.6rem;
+            color: var(--accent-cyan);
+        }
+
+        .topic-card p {
+            margin: 0;
+            font-size: 1rem;
+            color: #cdcdcd;
+            line-height: 1.6;
+        }
+
+        .tag {
+            background-color: rgba(76, 201, 240, 0.15);
+            color: var(--accent-blue);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="watermark-overlay"></div>
+
+    <div class="container">
+        <header>
+            <a href="../../index.html" class="back-btn">🏠 العودة للرئيسية</a>
+            <h1>🎯 الزخم الخطي والدفع</h1>
+            <p>إعداد الأستاذ ماجد شلالدة - اختر المحاكاة المطلوبة لبدء التجربة التفاعلية</p>
+        </header>
+
+        <main class="grid-layout">
+            
+            <!-- فرع حساب الزخم والدفع -->
+            <a href="linear_momentum.html" class="topic-card">
+                <div class="icon">🚀</div>
+                <h2>مفهوم الزخم الخطي</h2>
+                <p>استكشاف العلاقة بين كتلة الجسم وسرعته المتجهة وتأثيرهما على كمية التحرك.</p>
+                <span class="tag">P = m · v</span>
+            </a>
+
+            <!-- فرع مبرهنة الزخم والدفع -->
+            <a href="impulse_theorem.html" class="topic-card">
+                <div class="icon">🔨</div>
+                <h2>مبرهنة الزخم - الدفع</h2>
+                <p>دراسة القوة المؤثرة خلال زمن التلامس وكيف يغير الدفع من زخم الأجسام.</p>
+                <span class="tag">I = ΔP</span>
+            </a>
+
+            <!-- فرع العلاقة بين القوة والزمن -->
+            <a href="force_time.html" class="topic-card">
+                <div class="icon">⏱️</div>
+                <h2>العلاقة بين القوة والزمن</h2>
+                <p>استكشاف تأثير زمن تأثير القوة في الدفع وتغير الزخم، مع محاكاة تفاعلية للقوة والزمن.</p>
+                <span class="tag">I = F · Δt = ΔP</span>
+            </a>
+
+            <!-- فرع حفظ كمية التحرك -->
+            <a href="conservation_momentum.html" class="topic-card">
+                <div class="icon">⚖️</div>
+                <h2>قانون حفظ الزخم</h2>
+                <p>تطبيقات عملية على الأنظمة المعزولة وحساب ثبات مجموع الزخم قبل وبعد الحدث.</p>
+                <span class="tag">∑P_i = ∑P_f</span>
+            </a>
+
+        </main>
+    </div>
+
+</body>
+</html>

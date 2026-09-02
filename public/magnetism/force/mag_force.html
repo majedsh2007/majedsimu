@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title> القوة المغناطيسية | الأستاذ ماجد شلالدة</title>
+
+<style>
+:root{
+    --bg:#0b1329;
+    --card:#1c2541;
+    --card2:#3a506b;
+    --text:#fff;
+    --gold:#ffd166;
+    --cyan:#00b4d8;
+    --green:#06d6a0;
+}
+
+*{box-sizing:border-box}
+
+body{
+    margin:0;
+    min-height:100vh;
+    font-family:Tahoma, Arial, sans-serif;
+    color:var(--text);
+    background:
+        radial-gradient(circle at 20% 20%, rgba(0,180,216,.12), transparent 30%),
+        radial-gradient(circle at 80% 80%, rgba(255,209,102,.10), transparent 30%),
+        var(--bg);
+    padding:30px 18px;
+    position:relative;
+}
+
+.watermark{
+    position:fixed;
+    inset:0;
+    background-image:url('logo.png');
+    background-repeat:repeat;
+    background-size:180px;
+    opacity:.025;
+    transform:rotate(-12deg) scale(1.15);
+    pointer-events:none;
+    z-index:0;
+}
+
+.container{
+    position:relative;
+    z-index:1;
+    max-width:1050px;
+    margin:auto;
+}
+
+header{
+    text-align:center;
+    margin-bottom:38px;
+}
+
+.logo{
+    width:120px;
+    height:120px;
+    object-fit:contain;
+    border-radius:50%;
+    box-shadow:0 0 25px rgba(0,180,216,.22);
+}
+
+h1{
+    color:var(--gold);
+    font-size:clamp(2rem,5vw,3rem);
+    margin:18px 0 8px;
+}
+
+.subtitle{
+    color:#d9e2ec;
+    font-size:1.15rem;
+    line-height:1.8;
+}
+
+.teacher{
+    color:var(--cyan);
+    font-size:1.15rem;
+    font-weight:bold;
+    margin-top:10px;
+}
+
+.contents{
+    background:rgba(28,37,65,.94);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:22px;
+    padding:30px;
+    box-shadow:0 15px 40px rgba(0,0,0,.35);
+}
+
+.section-title{
+    text-align:center;
+    color:var(--gold);
+    margin:0 0 25px;
+    font-size:1.8rem;
+}
+
+.cards{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+    gap:20px;
+}
+
+.card{
+    display:block;
+    text-decoration:none;
+    color:var(--text);
+    background:linear-gradient(145deg,#3a506b,#263653);
+    border:1px solid rgba(255,255,255,.08);
+    border-radius:17px;
+    padding:25px;
+    min-height:190px;
+    transition:.25s ease;
+    position:relative;
+    overflow:hidden;
+}
+
+.card::after{
+    content:"";
+    position:absolute;
+    width:100px;
+    height:100px;
+    border-radius:50%;
+    left:-30px;
+    bottom:-35px;
+    background:rgba(255,255,255,.05);
+}
+
+.card:hover{
+    transform:translateY(-7px);
+    box-shadow:0 12px 28px rgba(0,0,0,.35);
+    border-color:var(--gold);
+}
+
+.icon{
+    font-size:2.7rem;
+    display:block;
+    margin-bottom:12px;
+}
+
+.card h3{
+    margin:0 0 10px;
+    font-size:1.35rem;
+    color:var(--gold);
+}
+
+.card p{
+    margin:0;
+    color:#e4e8ed;
+    line-height:1.8;
+}
+
+.go{
+    display:inline-block;
+    margin-top:16px;
+    color:var(--cyan);
+    font-weight:bold;
+}
+
+.back{
+    position:fixed;
+    top:18px;
+    right:18px;
+    z-index:10;
+    display:block;
+    width:max-content;
+    margin:0;
+    padding:12px 25px;
+    border-radius:12px;
+    background:rgba(0,180,216,.12);
+    border:1px solid rgba(0,180,216,.35);
+    color:#fff;
+    text-decoration:none;
+    transition:.2s;
+}
+
+.back:hover{
+    background:rgba(0,180,216,.25);
+    transform:translateY(-2px);
+}
+
+footer{
+    text-align:center;
+    margin-top:28px;
+    color:#9da8b8;
+    font-size:.95rem;
+}
+</style>
+</head>
+
+<body>
+
+<div class="watermark"></div>
+
+<div class="container">
+
+<header>
+    <img src="logo.png" class="logo" alt="شعار الأستاذ ماجد شلالدة">
+    <h1>🧲 القوة المغناطيسية</h1>
+    <div class="subtitle">
+        فهرس تفاعلي للانتقال إلى أهم تطبيقات القوة المغناطيسية
+    </div>
+    <div class="teacher">إعداد وتطوير: الأستاذ ماجد شلالدة</div>
+</header>
+
+<section class="contents">
+
+    <h2 class="section-title">فهرس التطبيقات</h2>
+
+    <div class="cards">
+
+        <a href="mag_force1.html" class="card">
+            <span class="icon">🧲</span>
+            <h3>القوة المغناطيسية</h3>
+            <p>
+                الانتقال إلى المحاكاة الأساسية للقوة المغناطيسية
+                وتأثير المجال المغناطيسي في الجسيمات المشحونة.
+            </p>
+            <span class="go">الانتقال إلى القوة المغناطيسية ←</span>
+        </a>
+
+        <a href="velocity_selector.html" class="card">
+            <span class="icon">⚡🧲</span>
+            <h3>جهاز منتقي السرعات</h3>
+            <p>
+                دراسة حركة الجسيمات المشحونة في مجالين كهربائي
+                ومغناطيسي وانتقاء الجسيمات ذات السرعة المناسبة.
+            </p>
+            <span class="go">فتح منتقي السرعات ←</span>
+        </a>
+
+        <a href="cyclotron.html" class="card">
+            <span class="icon">⚛️🧲</span>
+            <h3>المسارع النووي</h3>
+            <p>
+                استكشاف استخدام المجال المغناطيسي في توجيه
+                الجسيمات المشحونة داخل المسار الدائري للمسارع.
+            </p>
+            <span class="go">فتح المسارع النووي ←</span>
+        </a>
+
+    </div>
+
+    <a href="../../index.html" class="back">← الرئيسية</a>
+
+</section>
+
+<footer>
+    المنصة التفاعلية للمحاكاة الفيزيائية — الأستاذ ماجد شلالدة
+</footer>
+
+</div>
+
+</body>
+</html>

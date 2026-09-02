@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>التصادمات | الأستاذ ماجد شلالدة (0599870176)</title>
+    <style>
+        :root {
+            --bg-color: #0b1329;
+            --main-card-bg: #1c2541;
+            --sub-card-bg: #3a506b;
+            --text-color: #ffffff;
+            --accent-cyan: #00b4d8;
+            --accent-orange: #f77f00;
+        }
+
+        body {
+            font-family: system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            box-sizing: border-box;
+            position: relative;
+        }
+
+        /* الخلفية المائية لشعار الأستاذ ماجد */
+        .watermark-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: url('logo.png');
+            background-size: 180px;
+            opacity: 0.02;
+            pointer-events: none;
+            z-index: 0;
+            transform: rotate(-15deg) scale(1.2);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 1;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            position: relative;
+        }
+
+        .back-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--main-card-bg);
+            color: var(--accent-cyan);
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            font-weight: bold;
+            border: 1px solid var(--accent-cyan);
+            transition: all 0.2s ease;
+        }
+
+        .back-btn:hover {
+            background-color: var(--accent-cyan);
+            color: var(--bg-color);
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            color: var(--accent-orange);
+            margin-bottom: 10px;
+            margin-top: 40px;
+        }
+
+        header p {
+            color: #a5a5a5;
+            font-size: 1.1rem;
+        }
+
+        .collision-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-top: 30px;
+        }
+
+        .collision-card {
+            background-color: var(--main-card-bg);
+            border-radius: 14px;
+            padding: 25px;
+            text-decoration: none;
+            color: var(--text-color);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
+            transition: transform 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .collision-card:hover {
+            transform: translateY(-8px);
+            border-color: var(--accent-orange);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.5);
+        }
+
+        .collision-card .icon {
+            font-size: 3.5rem;
+            margin-bottom: 15px;
+        }
+
+        /* كرات نيوتن بألوان مختلفة */
+        .newton-balls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 5px;
+            height: 65px;
+        }
+
+        .newton-balls .ball {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: inline-block;
+            border: 2px solid rgba(255,255,255,0.75);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.35),
+                        inset 4px 4px 7px rgba(255,255,255,0.35);
+        }
+
+        .newton-balls .ball1 { background: #e63946; }
+        .newton-balls .ball2 { background: #f4a261; }
+        .newton-balls .ball3 { background: #2a9d8f; }
+        .newton-balls .ball4 { background: #457b9d; }
+        .newton-balls .ball5 { background: #9b5de5; }
+
+        .collision-card:hover .newton-balls .ball {
+            transform: translateY(-3px);
+        }
+
+        .newton-balls .ball {
+            transition: transform 0.25s ease;
+        }
+
+
+        .collision-card h2 {
+            margin: 0 0 12px 0;
+            font-size: 1.6rem;
+            color: var(--accent-cyan);
+        }
+
+        .collision-card p {
+            margin: 0;
+            font-size: 1rem;
+            color: #cdcdcd;
+            line-height: 1.6;
+        }
+
+        .tag {
+            background-color: rgba(247, 127, 0, 0.2);
+            color: var(--accent-orange);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- تفعيل العلامة المائية بالخلفية -->
+    <div class="watermark-overlay"></div>
+
+    <div class="container">
+        <header>
+            <a href="../../index.html" class="back-btn">⬅ العودة للرئيسية</a>
+            <h1>💥 التصادمات</h1>
+            <p>إعداد الأستاذ ماجد شلالده (0599870176) - اختر نوع التصادم لبدء التجربة المخبرية</p>
+        </header>
+
+        <main class="collision-grid">
+            
+<a href="collision_1d.html" class="collision-card">
+                <div class="icon">➡️⚽⬅️</div>
+                <h2>التصادم على سطح افقي</h2>
+                <p>دراسة تصادم الكتل على مسار مستقيم واحد، وحساب السرعات قبل وبعد التصادم المرن وغير المرن.</p>
+                <span class="tag">خط مستقيم</span>
+            
+            </a>
+
+           <a href="1slop.html" class="collision-card">
+                <div class="icon">⚽↘️💥⚽</div>
+                <h2>محاكاة انزلاق كرة من منحدر وتصادمها مع كرة اخرى</h2>
+                <p>محاكاة تفاعلية لانزلاق كرة على سطح مائل ثم تصادمها مع كرة أخرى، مع دراسة السرعات والزخم والطاقة وأنواع التصادم.</p>
+                <span class="tag">محاكاة تفاعلية</span>
+            </a>
+          <a href="2slop.html" class="collision-card"> 
+                <div class="icon">⚽↘️💥↙️⚽</div>
+                <h2>محاكاة انزلاق كرتين من منحدرين ثم تصدمهما معا</h2>
+                <p>محاكاة تفاعلية لانزلاق كرتين على سطحين مائلين ثم تصادمهما معا، مع دراسة السرعات والزخم والطاقة وأنواع التصادم.</p>
+                <span class="tag">محاكاة تفاعلية</span>
+            </a>
+            <a href="newton_cradle.html" class="collision-card">
+                <div class="icon newton-balls" aria-label="كرات نيوتن">
+                    <span class="ball ball1"></span>
+                    <span class="ball ball2"></span>
+                    <span class="ball ball3"></span>
+                    <span class="ball ball4"></span>
+                    <span class="ball ball5"></span>
+                </div>
+                <h2>كرات نيوتن (Newton's Cradle)</h2>
+                <p>محاكاة تفاعلية لكرات نيوتن لدراسة حفظ الزخم والطاقة في التصادمات المرنة وانتقال الحركة بين الكرات.</p>
+                <span class="tag">حفظ الزخم والطاقة</span>
+            </a>
+
+            <a href="pend.html" class="collision-card">
+                <div class="icon">🏹🔴</div>
+                <h2>تصادم كرة معلقة بخيط مع جسم</h2>
+                <p>تطبيق عملي على البندول القذفي، حيث يصطدم مقذوف بكتلة معلقة لدراسة تحول الطاقة وحفظ الزخم.</p>
+                <span class="tag">حفظ طاقة وزخم</span>
+            </a>
+
+            <a href="collision_2d.html" class="collision-card">
+                <div class="icon">🎱</div>
+                <h2>التصادم في بعدين</h2>
+                <p>محاكاة حركة الكرات وتحللها بزوايا مختلفة بعد التصادم (مثل كرات البلياردو) باستخدام المتجهات.</p>
+                <span class="tag">تحليل زوايا وموجات</span>
+            </a>
+
+        </main>
+    </div>
+
+</body>
+</html>
