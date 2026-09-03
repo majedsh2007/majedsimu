@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>محاكاة السيكلوترون - أ. ماجد شلالده</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111116;
+            color: #ffffff;
+            text-align: center;
+            padding: 20px;
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        h1 {
+            color: #00ffaa;
+            margin-bottom: 5px;
+        }
+        .signature {
+            font-size: 16px;
+            color: #ffcc00;
+            font-weight: bold;
+            margin-bottom: 20px;
+            letter-spacing: 1px;
+            text-shadow: 0 0 8px rgba(255, 204, 0, 0.3);
+        }
+        .btn-container {
+            margin-bottom: 15px;
+        }
+        button {
+            font-size: 16px;
+            font-weight: bold;
+            padding: 10px 25px;
+            margin: 0 10px;
+            cursor: pointer;
+            background-color: #00ffaa;
+            color: #111116;
+            border: none;
+            border-radius: 4px;
+            transition: background-color 0.2s;
+        }
+        button:hover {
+            background-color: #00cc88;
+        }
+        button:disabled {
+            background-color: #444;
+            color: #888;
+            cursor: not-allowed;
+        }
+        /* تنسيق خاص لزر الإيقاف المؤقت عند تفعيله */
+        #pauseBtn {
+            background-color: #ffaa00;
+            color: #111116;
+        }
+        #pauseBtn:hover {
+            background-color: #dd9400;
+        }
+        canvas {
+            background-color: #050508;
+            border: 2px solid #333;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.8);
+        }
+        .info {
+            margin-top: 15px;
+            background-color: #1e1e24;
+            padding: 15px;
+            border-radius: 6px;
+            text-align: center;
+            max-width: 580px;
+            border-bottom: 4px solid #00ffaa;
+            box-sizing: border-box;
+        }
+        .info p {
+            margin: 8px 0;
+            line-height: 1.6;
+        }
+    </style>
+    <script src="../../auth.js"></script>
+</head>
+<body>
+
+    <h1>محاكاة السيكلوترون (D2 على اليمين)</h1>
+    <div class="signature">إعداد وتصميم: ماجد شلالده 0599870176</div>
+    
+    <div class="btn-container">
+        <button id="launchBtn">إطلاق البروتون</button>
+        <button id="pauseBtn" disabled>إيقاف مؤقت</button>
+        <button id="resetBtn">إعادة ضبط</button>
+    </div>
+
+    <canvas id="myCanvas" width="600" height="600"></canvas>
+
+    <div class="info">
+        <p><strong>الشروط الفيزيائية المعايرة في المحاكاة:</strong></p>
+        <p>• <b>القرص D2 (يمين)</b>: يبدأ بشحنة <span style="color:#ff4444;">موجبة (+)</span> عند الإطلاق.</p>
+        <p>• <b>القرص D1 (يسار)</b>: يبدأ بشحنة <span style="color:#3b82f6;">سالبة (-)</span> عند الإطلاق.</p>
+        <p>• <b>إتجاه المقذوف</b>: ينطلق البروتون من الفجوة <span style="color:#00ffaa;">نحو اليسار</span> لينجذب فوراً إلى D1 السالب ويتسارع كهربائياً.</p>
+        <p>• <b>المجال المغناطيسي</b>: منتظم ومتجه <span style="color:#00ffaa;">نحو الخارج (•)</span>، مما يجبر البروتون على الانحراف <span style="color:#00ffaa;">للأعلى</span> والدوران مع عقارب الساعة وفقاً لقاعدة اليد اليمنى.</p>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('myCanvas');
+        const ctx = canvas.getContext('2d');
+        const launchBtn = document.getElementById('launchBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const resetBtn = document.getElementById('resetBtn');
+
+        // مركز الشاشة والأبعاد
+        const cx = 300;
+        const cy = 300;
+        const rDee = 250; 
+        const gap = 16;   
+
+        // متغيرات البروتون
+        let px = cx;
+        let py = cy;
+        let vx = -1.5; 
+        let vy = 0;
+        let pathHistory = [];
+
+        // الثوابت الفيزيائية للمحاكاة
+        const B = -0.075; 
+        const boost = 0.45; 
+        let running = false;
+        let isPaused = false; // متغير جديد لمراقبة حالة الإيقاف المؤقت
+        let animId = null;
+
+        // الشحنات الابتدائية (اليمين D2 موجب، اليسار D1 سالب)
+        let d2Sign = "+"; 
+        let d1Sign = "-"; 
+
+        function drawEverything() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            // --- 1. رسم القرص الأيسر D1 (يسار) ---
+            ctx.beginPath();
+            ctx.arc(cx - gap/2, cy, rDee, Math.PI/2, (3*Math.PI)/2);
+            ctx.closePath();
+            ctx.fillStyle = d1Sign === "+" ? "rgba(255, 68, 68, 0.15)" : "rgba(59, 130, 246, 0.15)";
+            ctx.strokeStyle = d1Sign === "+" ? "#ff4444" : "#3b82f6";
+            ctx.lineWidth = 3;
+            ctx.fill();
+            ctx.stroke();
+
+            // --- 2. رسم القرص الأيمن D2 (يمين) ---
+            ctx.beginPath();
+            ctx.arc(cx + gap/2, cy, rDee, (3*Math.PI)/2, Math.PI/2);
+            ctx.closePath();
+            ctx.fillStyle = d2Sign === "+" ? "rgba(255, 68, 68, 0.15)" : "rgba(59, 130, 246, 0.15)";
+            ctx.strokeStyle = d2Sign === "+" ? "#ff4444" : "#3b82f6";
+            ctx.lineWidth = 3;
+            ctx.fill();
+            ctx.stroke();
+
+            // --- 3. كتابة النصوص والشحنات مع إزاحة D2 لأقصى اليمين ---
+            ctx.font = "bold 16px Arial";
+            
+            // D1 (يسار)
+            ctx.fillStyle = d1Sign === "+" ? "#ff4444" : "#3b82f6";
+            ctx.fillText("D1 (يسار) : " + d1Sign, cx - 150, cy - rDee + 30);
+
+            // D2 (يمين)
+            ctx.fillStyle = d2Sign === "+" ? "#ff4444" : "#3b82f6";
+            ctx.fillText("D2 (يمين) : " + d2Sign, cx + 140, cy - rDee + 30);
+
+            // --- 4. رسم نقاط المجال المغناطيسي (للخارج •) ---
+            ctx.fillStyle = "rgba(0, 255, 170, 0.3)";
+            for (let xG = -rDee; xG <= rDee; xG += 35) {
+                for (let yG = -rDee; yG <= rDee; yG += 35) {
+                    if (xG*xG + yG*yG < rDee*rDee && Math.abs(xG) > gap/2) {
+                        ctx.fillText("•", cx + xG - 3, cy + yG + 4);
+                    }
+                }
+            }
+
+            // --- 5. رسم مسار البروتون الحلزوني ---
+            if (pathHistory.length > 1) {
+                ctx.beginPath();
+                ctx.moveTo(pathHistory.x, pathHistory.y);
+                for (let i = 1; i < pathHistory.length; i++) {
+                    ctx.lineTo(pathHistory[i].x, pathHistory[i].y);
+                }
+                ctx.strokeStyle = "#00ffaa";
+                ctx.lineWidth = 2.5;
+                ctx.stroke();
+            }
+
+            // --- 6. رسم جسيم البروتون الأحمر ---
+            ctx.beginPath();
+            ctx.arc(px, py, 6, 0, 2 * Math.PI);
+            ctx.fillStyle = "#ff3333";
+            ctx.fill();
+        }
+
+        function updatePhysics() {
+            if (!running || isPaused) return; // التوقف عن الحساب إذا تم التفعيل
+
+            pathHistory.push({x: px, y: py});
+
+            if (px < cx - gap/2) {
+                let Fx = vy * B;
+                let Fy = -vx * B;
+                vx += Fx;
+                vy += Fy;
+            } 
+            else if (px > cx + gap/2) {
+                let Fx = vy * B;
+                let Fy = -vx * B;
+                vx += Fx;
+                vy += Fy;
+            } 
+            else {
+                if (vx < 0 && d1Sign === "-") {
+                    vx -= boost; 
+                } else if (vx > 0 && d2Sign === "-") {
+                    vx += boost; 
+                }
+            }
+
+            px += vx;
+            py += vy;
+
+            if (Math.abs(py - cy) > 10) {
+                if (vx > 0 && d1Sign === "-") {
+                    d2Sign = "-";
+                    d1Sign = "+";
+                } else if (vx < 0 && d2Sign === "-") {
+                    d2Sign = "+";
+                    d1Sign = "-";
+                }
+            }
+
+            let dist = Math.sqrt((px-cx)*(px-cx) + (py-cy)*(py-cy));
+            if (dist > rDee) {
+                running = false;
+                pauseBtn.disabled = true;
+                alert("اكتمل التسريع! خرج البروتون بنجاح محققاً أعلى طاقة حركية ممكنة.");
+                cancelAnimationFrame(animId);
+                return;
+            }
+
+            drawEverything();
+            animId = requestAnimationFrame(updatePhysics);
+        }
+
+        // حدث زر الإطلاق
+        launchBtn.addEventListener('click', () => {
+            if (!running) {
+                running = true;
+                isPaused = false;
+                launchBtn.disabled = true;
+                pauseBtn.disabled = false;
+                pauseBtn.textContent = "إيقاف مؤقت";
+                updatePhysics();
+            }
+        });
+
+        // حدث زر الإيقاف المؤقت والاستئناف الجديد
+        pauseBtn.addEventListener('click', () => {
+            if (running) {
+                if (!isPaused) {
+                    isPaused = true;
+                    pauseBtn.textContent = "استئناف الحركة";
+                } else {
+                    isPaused = false;
+                    pauseBtn.textContent = "إيقاف مؤقت";
+                    updatePhysics(); // العودة لمتابعة الحسابات الفيزيائية من نفس الإحداثيات
+                }
+            }
+        });
+
+        // حدث زر إعادة الضبط
+        resetBtn.addEventListener('click', () => {
+            running = false;
+            isPaused = false;
+            cancelAnimationFrame(animId);
+            px = cx;
+            py = cy;
+            vx = -1.5;
+            vy = 0;
+            pathHistory = [];
+            d2Sign = "+"; 
+            d1Sign = "-"; 
+            launchBtn.disabled = false;
+            pauseBtn.disabled = true;
+            pauseBtn.textContent = "إيقاف مؤقت";
+            drawEverything();
+        });
+
+        drawEverything();
+    </script>
+</body>
+</html>

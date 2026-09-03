@@ -1,0 +1,3700 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width, initial-scale=1.0">
+
+<title>محاكاة القوة والزمن</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<style>
+
+*{
+    box-sizing:border-box;
+}
+
+body{
+
+    margin:0;
+
+    font-family:
+        Arial,
+        Tahoma,
+        sans-serif;
+
+    background:#eef2f6;
+
+    color:#172033;
+}
+
+
+.container{
+
+    max-width:1450px;
+
+    margin:auto;
+
+    padding:18px;
+}
+
+
+/* =====================================================
+   أزرار التنقل
+===================================================== */
+
+.navigation{
+
+    position:relative;
+
+    height:48px;
+
+    margin-bottom:5px;
+}
+
+
+.nav-left,
+.nav-right{
+
+    position:absolute;
+
+    top:0;
+
+}
+
+
+.nav-right{
+    right:0;
+    display:flex;
+    align-items:center;
+    gap:4px;
+}
+
+
+.nav-left{
+
+    left:0;
+}
+
+
+.nav-button{
+
+    border:none;
+
+    border-radius:8px;
+
+    padding:9px 15px;
+
+    margin:2px;
+
+    background:#174e7c;
+
+    color:white;
+
+    font-size:14px;
+
+    font-weight:bold;
+
+    cursor:pointer;
+
+    transition:.2s;
+
+}
+
+
+.nav-button:hover{
+
+    background:#0d3659;
+
+    transform:translateY(-1px);
+
+}
+
+
+/* =====================================================
+   العنوان
+===================================================== */
+
+.title{
+
+    text-align:center;
+
+    margin:0;
+
+    color:#153b61;
+
+    font-size:30px;
+
+}
+
+
+.teacher{
+
+    text-align:center;
+
+    font-size:19px;
+
+    font-weight:bold;
+
+    color:#333;
+
+    margin-top:7px;
+
+    margin-bottom:20px;
+
+}
+
+
+/* =====================================================
+   اللوحات
+===================================================== */
+
+.panel{
+
+    background:white;
+
+    border-radius:16px;
+
+    padding:18px;
+
+    margin-bottom:18px;
+
+    box-shadow:
+        0 4px 15px rgba(0,0,0,.10);
+
+}
+
+
+.panel-title{
+
+    text-align:center;
+
+    font-size:21px;
+
+    font-weight:bold;
+
+    color:#244b6f;
+
+    margin:3px 0 13px;
+
+}
+
+
+/* =====================================================
+   التحكم
+===================================================== */
+
+.controls{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(4,1fr);
+
+    gap:15px;
+
+}
+
+
+.control{
+
+    background:#f4f6f8;
+
+    border-radius:10px;
+
+    padding:13px;
+
+}
+
+
+.control label{
+
+    display:block;
+
+    font-weight:bold;
+
+    margin-bottom:8px;
+
+}
+
+
+input[type=range]{
+
+    width:100%;
+
+}
+
+
+.value{
+
+    text-align:center;
+
+    color:#1769aa;
+
+    font-size:18px;
+
+    font-weight:bold;
+
+    margin-top:7px;
+
+}
+
+
+.buttons{
+
+    text-align:center;
+
+    margin-top:15px;
+
+}
+
+
+button{
+
+    border:none;
+
+    border-radius:8px;
+
+    padding:10px 17px;
+
+    margin:4px;
+
+    cursor:pointer;
+
+    font-size:15px;
+
+    font-weight:bold;
+
+}
+
+
+.start{
+
+    background:#198754;
+
+    color:white;
+
+}
+
+
+.pause{
+
+    background:#ffc107;
+
+    color:#111;
+
+}
+
+
+.reset{
+
+    background:#dc3545;
+
+    color:white;
+
+}
+
+
+.add{
+
+    background:#1769aa;
+
+    color:white;
+
+}
+
+
+.default{
+
+    background:#6c757d;
+
+    color:white;
+
+}
+
+
+/* =====================================================
+   تعليمات الرسم
+===================================================== */
+
+.instructions{
+
+    text-align:center;
+
+    background:#f5f8fb;
+
+    padding:11px;
+
+    border-radius:9px;
+
+    line-height:1.9;
+
+    margin-bottom:12px;
+
+}
+
+
+.green-text{
+
+    color:#139447;
+
+    font-weight:bold;
+
+}
+
+
+.red-text{
+
+    color:#d62d2d;
+
+    font-weight:bold;
+
+}
+
+
+/* =====================================================
+   الرسم البياني + العلامة المائية
+===================================================== */
+
+.graph-wrapper{
+
+    position:relative;
+
+    height:500px;
+
+    overflow:hidden;
+
+    border-radius:12px;
+
+    background:#fff;
+
+}
+
+
+/*
+   العلامة المائية خلف الرسم فقط
+*/
+
+.watermark{
+
+    position:absolute;
+
+    left:50%;
+
+    top:50%;
+
+    transform:
+        translate(-50%,-50%);
+
+    width:360px;
+
+    height:360px;
+
+    object-fit:contain;
+
+    opacity:.10;
+
+    pointer-events:none;
+
+    z-index:0;
+
+    user-select:none;
+
+}
+
+
+/*
+   الرسم فوق العلامة المائية
+*/
+
+.graph-wrapper canvas{
+
+    position:relative;
+
+    z-index:1;
+
+}
+
+
+/* =====================================================
+   جدول النقاط
+===================================================== */
+
+.table-wrapper{
+
+    overflow-x:auto;
+
+    margin-top:15px;
+
+}
+
+
+table{
+
+    width:100%;
+
+    border-collapse:collapse;
+
+}
+
+
+th,
+td{
+
+    border:1px solid #d5dbe1;
+
+    padding:8px;
+
+    text-align:center;
+
+}
+
+
+th{
+
+    background:#e9eef3;
+
+}
+
+
+td input{
+
+    width:100px;
+
+    max-width:100%;
+
+    padding:6px;
+
+    text-align:center;
+
+    border:
+        1px solid #aaa;
+
+    border-radius:5px;
+
+}
+
+
+.delete{
+
+    background:#dc3545;
+
+    color:white;
+
+    padding:6px 11px;
+
+    margin:0;
+
+}
+
+
+/* =====================================================
+   بطاقات البيانات
+===================================================== */
+
+.data-grid{
+
+    display:grid;
+
+    grid-template-columns:
+        repeat(6,1fr);
+
+    gap:10px;
+
+    margin-top:15px;
+
+}
+
+
+.data-box{
+
+    background:#f2f5f8;
+
+    border-radius:10px;
+
+    padding:11px;
+
+    text-align:center;
+
+}
+
+
+.data-box span{
+
+    display:block;
+
+    font-size:13px;
+
+    color:#555;
+
+}
+
+
+.data-box strong{
+
+    display:block;
+
+    font-size:19px;
+
+    margin-top:5px;
+
+    color:#174e7c;
+
+}
+
+
+/* =====================================================
+   حساب القوة المتوسطة
+===================================================== */
+
+.average-force{
+
+    display:grid;
+
+    grid-template-columns:
+        1fr 1fr 1fr;
+
+    gap:15px;
+
+    align-items:end;
+
+}
+
+
+.input-box{
+
+    background:#f4f6f8;
+
+    padding:12px;
+
+    border-radius:10px;
+
+}
+
+
+.input-box label{
+
+    display:block;
+
+    font-weight:bold;
+
+    margin-bottom:7px;
+
+}
+
+
+.input-box input{
+
+    width:100%;
+
+    padding:9px;
+
+    border:
+        1px solid #aaa;
+
+    border-radius:6px;
+
+    font-size:16px;
+
+    text-align:center;
+
+}
+
+
+.calculate{
+
+    background:#1769aa;
+
+    color:white;
+
+    width:100%;
+
+    margin:0;
+
+}
+
+
+.result-box{
+
+    margin-top:15px;
+
+    padding:15px;
+
+    text-align:center;
+
+    background:#e9f3fb;
+
+    border-radius:10px;
+
+    font-size:20px;
+
+    font-weight:bold;
+
+    color:#174e7c;
+
+}
+
+
+/* =====================================================
+   الحركة
+===================================================== */
+
+.motion{
+
+    height:280px;
+
+}
+
+
+#motionCanvas{
+
+    width:100%;
+
+    height:100%;
+
+    display:block;
+
+    border-radius:10px;
+
+    background:#f8fafc;
+
+}
+
+
+/* =====================================================
+   السرعة
+===================================================== */
+
+.velocity-chart{
+
+    height:350px;
+
+}
+
+
+/* =====================================================
+   المعادلات
+===================================================== */
+
+.formulas{
+
+    text-align:center;
+
+    line-height:2.1;
+
+    font-size:19px;
+
+}
+
+
+/* =====================================================
+   الهاتف
+===================================================== */
+
+@media(max-width:950px){
+
+    .controls{
+
+        grid-template-columns:
+            1fr 1fr;
+
+    }
+
+
+    .data-grid{
+
+        grid-template-columns:
+            repeat(3,1fr);
+
+    }
+
+
+    .average-force{
+
+        grid-template-columns:1fr;
+
+    }
+
+}
+
+
+@media(max-width:600px){
+
+    .controls{
+
+        grid-template-columns:1fr;
+
+    }
+
+
+    .data-grid{
+
+        grid-template-columns:
+            repeat(2,1fr);
+
+    }
+
+
+    .title{
+
+        font-size:23px;
+
+    }
+
+
+    .teacher{
+
+        font-size:16px;
+
+    }
+
+
+    .nav-button{
+
+        padding:7px 9px;
+
+        font-size:12px;
+
+    }
+
+}
+
+</style>
+
+    <script src="../../auth.js"></script>
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+<!-- =====================================================
+     التنقل
+===================================================== -->
+
+<div class="navigation">
+
+    <div class="nav-right">
+
+        <button
+            class="nav-button"
+            onclick="location.href='momentum.html'">
+
+            ← صفحة الزخم الخطي
+
+        </button>
+
+        <button
+            class="nav-button"
+            onclick="location.href='../../index.html'">
+
+            🏠 الصفحة الرئيسية
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     العنوان
+===================================================== -->
+
+<h1 class="title">
+
+    محاكاة العلاقة بين القوة والزمن
+
+</h1>
+
+
+<div class="teacher">
+
+    إعداد الأستاذ ماجد شلالده 0599870176
+
+</div>
+
+
+<!-- =====================================================
+     التحكم
+===================================================== -->
+
+<div class="panel">
+
+    <div class="controls">
+
+
+        <div class="control">
+
+            <label>
+                كتلة الجسم (m)
+            </label>
+
+            <input
+                id="mass"
+                type="range"
+                min="0.1"
+                max="20"
+                step="0.1"
+                value="2">
+
+            <div class="value">
+
+                <span id="massValue">
+                    2.0
+                </span>
+
+                kg
+
+            </div>
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                السرعة الابتدائية(v_0)
+            </label>
+
+            <input
+                id="initialVelocity"
+                type="range"
+                min="-20"
+                max="20"
+                step="0.1"
+                value="0">
+
+            <div class="value">
+
+                <span id="velocityValue">
+                    0.0
+                </span>
+
+                m/s
+
+            </div>
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                زمن المحاكاة
+            </label>
+
+            <input
+                id="duration"
+                type="range"
+                min="5"
+                max="30"
+                step="1"
+                value="15">
+
+            <div class="value">
+
+                <span id="durationValue">
+                    15
+                </span>
+
+                s
+
+            </div>
+
+        </div>
+
+
+        <div class="control">
+
+            <label>
+                سرعة المحاكاة
+            </label>
+
+            <input
+                id="simulationSpeed"
+                type="range"
+                min="0.1"
+                max="5"
+                step="0.1"
+                value="1">
+
+            <div class="value">
+
+                ×
+                <span id="speedValue">
+                    1.0
+                </span>
+
+            </div>
+
+        </div>
+
+
+    </div>
+
+
+    <div class="buttons">
+
+        <button
+            class="start"
+            id="startButton">
+
+            ▶ تشغيل
+
+        </button>
+
+
+        <button
+            class="pause"
+            id="pauseButton">
+
+            ⏸ إيقاف
+
+        </button>
+
+
+        <button
+            class="reset"
+            id="resetButton">
+
+            ↻ إعادة ضبط
+
+        </button>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     القوة والزمن
+===================================================== -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        منحنى القوة - الزمن (F(t))
+
+    </div>
+
+
+    <div class="instructions">
+
+        اسحب النقاط الزرقاء لتغيير شكل الاقتران.
+
+        <br>
+
+        انقر داخل الرسم لإضافة نقطة.
+
+        اضغط بزر الفأرة الأيمن قرب نقطة لحذفها.
+
+        <br>
+
+        <span class="green-text">
+            الأخضر = الدفع الموجب
+        </span>
+
+        &nbsp;&nbsp;&nbsp;
+
+        <span class="red-text">
+            الأحمر = الدفع السالب
+        </span>
+
+    </div>
+
+
+    <div class="graph-wrapper">
+
+        <!--
+            ضع شعارك باسم logo.png
+            في نفس مجلد HTML
+        -->
+
+        <img
+            src="logo.png"
+            class="watermark"
+            alt="شعار"
+            draggable="false">
+
+
+        <canvas
+            id="forceChart">
+        </canvas>
+
+    </div>
+
+
+    <div class="buttons">
+
+        <button
+            class="add"
+            id="addPointButton">
+
+            ＋ إضافة نقطة
+
+        </button>
+
+
+        <button
+            class="default"
+            id="defaultCurveButton">
+
+            ↻ المنحنى الافتراضي
+
+        </button>
+
+    </div>
+
+
+    <!-- جدول النقاط -->
+
+    <div class="table-wrapper">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        النقطة
+                    </th>
+
+                    <th>
+                        الزمن (t)(s) 
+                    </th>
+
+                    <th>
+                        القوة (F) (N)
+                    </th>
+
+                    <th>
+                        حذف
+                    </th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody
+                id="pointsTable">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     حساب القوة المتوسطة
+===================================================== -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        حساب القوة المتوسطة خلال فترة زمنية
+
+    </div>
+
+
+    <div class="average-force">
+
+
+        <div class="input-box">
+
+            <label>
+                بداية الفترة (t_1)
+            </label>
+
+            <input
+                id="averageStart"
+                type="number"
+                value="0"
+                min="0"
+                step="0.01">
+
+        </div>
+
+
+        <div class="input-box">
+
+            <label>
+                نهاية الفترة (t_2)
+            </label>
+
+            <input
+                id="averageEnd"
+                type="number"
+                value="5"
+                min="0"
+                step="0.01">
+
+        </div>
+
+
+        <div>
+
+            <button
+                class="calculate"
+                id="calculateAverage">
+
+                حساب القوة المتوسطة
+
+            </button>
+
+        </div>
+
+
+    </div>
+
+
+    <div
+        class="result-box"
+        id="averageResult">
+
+        القوة المتوسطة =
+        0.00 N
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     الحركة
+===================================================== -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        حركة الجسم
+
+    </div>
+
+
+    <div class="motion">
+
+        <canvas
+            id="motionCanvas">
+        </canvas>
+
+    </div>
+
+
+    <div class="data-grid">
+
+
+        <div class="data-box">
+
+            <span>
+                الزمن
+            </span>
+
+            <strong id="timeValue">
+                0.00 s
+            </strong>
+
+        </div>
+
+
+        <div class="data-box">
+
+            <span>
+                القوة
+            </span>
+
+            <strong id="forceValue">
+                0.00 N
+            </strong>
+
+        </div>
+
+
+        <div class="data-box">
+
+            <span>
+                التسارع
+            </span>
+
+            <strong id="accelerationValue">
+                0.00 m/s²
+            </strong>
+
+        </div>
+
+
+        <div class="data-box">
+
+            <span>
+                السرعة
+            </span>
+
+            <strong id="currentVelocityValue">
+                0.00 m/s
+            </strong>
+
+        </div>
+
+
+        <div class="data-box">
+
+            <span>
+                الإزاحة
+            </span>
+
+            <strong id="positionValue">
+                0.00 m
+            </strong>
+
+        </div>
+
+
+        <div class="data-box">
+
+            <span>
+                الدفع المحصل
+            </span>
+
+            <strong id="netImpulseValue">
+                0.00 N·s
+            </strong>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     الدفع
+===================================================== -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        الدفع المستنتج من منحنى القوة والزمن
+
+    </div>
+
+
+    <div class="data-grid">
+
+
+        <div class="data-box">
+
+            <span>
+                الدفع الموجب (I_+)
+            </span>
+
+            <strong
+                id="positiveImpulse">
+
+                0.00 N·s
+
+            </strong>
+
+        </div>
+
+
+        <div class="data-box">
+
+            <span>
+                الدفع السالب (I_-)
+            </span>
+
+            <strong
+                id="negativeImpulse">
+
+                0.00 N·s
+
+            </strong>
+
+        </div>
+
+
+        <div class="data-box">
+
+            <span>
+                الدفع المحصل (I)
+            </span>
+
+            <strong
+                id="totalImpulse">
+
+                0.00 N·s
+
+            </strong>
+
+        </div>
+
+
+        <div class="data-box">
+
+            <span>
+                التغير في كمية الحركة
+            </span>
+
+            <strong
+                id="momentumChange">
+
+                0.00 kg·m/s
+
+            </strong>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     السرعة
+===================================================== -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        العلاقة بين السرعة والزمن (v(t))
+
+    </div>
+
+
+    <div class="velocity-chart">
+
+        <canvas
+            id="velocityChart">
+        </canvas>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+     العلاقات
+===================================================== -->
+
+<div class="panel">
+
+    <div class="panel-title">
+
+        العلاقات الفيزيائية
+
+    </div>
+
+
+    <div class="formulas">
+
+        <p>
+            \(F(t)=m\,a(t))
+        </p>
+
+        <p>
+            \(a(t)=frac{F(t)}{m})
+        </p>
+
+        <p>
+            \(I=int F(t)\,dt)
+        </p>
+
+        <p>
+            \(I=\Delta p=m(v-v_0))
+        </p>
+
+        <p>
+            \[
+            F_{\text{avg}}
+            =
+            \frac{1}{t_2-t_1}
+            \int_{t_1}^{t_2}F(t)\,dt
+            \]
+        </p>
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+<script>
+
+
+/* =====================================================
+   المتغيرات
+===================================================== */
+
+let mass = 2;
+
+let initialVelocity = 0;
+
+let duration = 15;
+
+let simulationSpeed = 1;
+
+let time = 0;
+
+let velocity = 0;
+
+let position = 0;
+
+let running = false;
+
+let lastTimestamp = null;
+
+
+/* =====================================================
+   منحنى القوة الافتراضي
+===================================================== */
+
+const defaultPoints = [
+
+    {t:0,  F:0},
+
+    {t:1,  F:20},
+
+    {t:2,  F:45},
+
+    {t:3,  F:10},
+
+    {t:4,  F:-30},
+
+    {t:5,  F:-10},
+
+    {t:6,  F:35},
+
+    {t:7,  F:65},
+
+    {t:8,  F:20},
+
+    {t:9,  F:-40},
+
+    {t:10, F:-15},
+
+    {t:11, F:30},
+
+    {t:12, F:75},
+
+    {t:13, F:30},
+
+    {t:14, F:-25},
+
+    {t:15, F:0}
+
+];
+
+
+let points =
+    JSON.parse(
+        JSON.stringify(defaultPoints)
+    );
+
+
+/* =====================================================
+   القوة عند زمن معين
+===================================================== */
+
+function forceAt(t){
+
+    if(points.length<2)
+        return 0;
+
+
+    if(t<=points[0].t)
+        return points[0].F;
+
+
+    if(
+        t>=points[points.length-1].t
+    )
+        return points[points.length-1].F;
+
+
+    for(
+        let i=0;
+        i<points.length-1;
+        i++
+    ){
+
+        const p1=points[i];
+
+        const p2=points[i+1];
+
+
+        if(
+            t>=p1.t &&
+            t<=p2.t
+        ){
+
+            const ratio=
+                (t-p1.t)/
+                (p2.t-p1.t);
+
+
+            return p1.F+
+                ratio*
+                (p2.F-p1.F);
+
+        }
+
+    }
+
+
+    return 0;
+
+}
+
+
+/* =====================================================
+   التكامل العددي للقوة بين زمنين
+===================================================== */
+
+function integrateForce(t1,t2){
+
+    if(t2<=t1)
+        return 0;
+
+
+    let total=0;
+
+    const step=0.002;
+
+    let previousT=t1;
+
+    let previousF=forceAt(previousT);
+
+
+    for(
+        let t=t1+step;
+        t<=t2;
+        t+=step
+    ){
+
+        const currentT=
+            Math.min(t,t2);
+
+        const currentF=
+            forceAt(currentT);
+
+
+        total +=
+            (previousF+currentF)/
+            2*
+            (currentT-previousT);
+
+
+        previousT=currentT;
+
+        previousF=currentF;
+
+
+        if(currentT>=t2)
+            break;
+
+    }
+
+
+    return total;
+
+}
+
+
+/* =====================================================
+   القوة المتوسطة
+===================================================== */
+
+function calculateAverageForce(){
+
+    let t1=
+        Number(
+            document
+            .getElementById(
+                "averageStart"
+            )
+            .value
+        );
+
+
+    let t2=
+        Number(
+            document
+            .getElementById(
+                "averageEnd"
+            )
+            .value
+        );
+
+
+    if(
+        !Number.isFinite(t1) ||
+        !Number.isFinite(t2)
+    ){
+
+        alert(
+            "أدخل قيمًا صحيحة للزمن."
+        );
+
+        return;
+
+    }
+
+
+    if(t1<0)
+        t1=0;
+
+
+    if(t2>duration)
+        t2=duration;
+
+
+    if(t2<=t1){
+
+        alert(
+            "يجب أن تكون نهاية الفترة أكبر من بدايتها."
+        );
+
+        return;
+
+    }
+
+
+    const impulse=
+        integrateForce(
+            t1,
+            t2
+        );
+
+
+    const average=
+        impulse/
+        (t2-t1);
+
+
+    document
+        .getElementById(
+            "averageResult"
+        )
+        .innerHTML=
+
+        `القوة المتوسطة =
+        <b>${average.toFixed(3)} N</b>
+        &nbsp;&nbsp; |
+        &nbsp;&nbsp;
+        الدفع خلال الفترة =
+        <b>${impulse.toFixed(3)} N·s</b>`;
+
+}
+
+
+document
+    .getElementById(
+        "calculateAverage"
+    )
+    .addEventListener(
+        "click",
+        calculateAverageForce
+    );
+
+
+/* =====================================================
+   حساب الدفع الكلي
+===================================================== */
+
+function calculateImpulse(){
+
+    let positive=0;
+
+    let negative=0;
+
+
+    for(
+        let i=0;
+        i<points.length-1;
+        i++
+    ){
+
+        const p1=points[i];
+
+        const p2=points[i+1];
+
+        const dt=
+            p2.t-p1.t;
+
+
+        if(
+            (p1.F>=0 && p2.F>=0) ||
+            (p1.F<=0 && p2.F<=0)
+        ){
+
+            const area=
+                (p1.F+p2.F)/
+                2*
+                dt;
+
+
+            if(area>=0)
+                positive+=area;
+            else
+                negative+=area;
+
+        }
+
+        else{
+
+            const ratio=
+                Math.abs(p1.F)/
+                (
+                    Math.abs(p1.F)+
+                    Math.abs(p2.F)
+                );
+
+
+            const dt1=
+                dt*ratio;
+
+
+            const dt2=
+                dt-dt1;
+
+
+            const area1=
+                p1.F*
+                dt1/
+                2;
+
+
+            const area2=
+                p2.F*
+                dt2/
+                2;
+
+
+            if(area1>=0)
+                positive+=area1;
+            else
+                negative+=area1;
+
+
+            if(area2>=0)
+                positive+=area2;
+            else
+                negative+=area2;
+
+        }
+
+    }
+
+
+    const total=
+        positive+negative;
+
+
+    document
+        .getElementById(
+            "positiveImpulse"
+        )
+        .textContent=
+        positive.toFixed(2)
+        +" N·s";
+
+
+    document
+        .getElementById(
+            "negativeImpulse"
+        )
+        .textContent=
+        negative.toFixed(2)
+        +" N·s";
+
+
+    document
+        .getElementById(
+            "totalImpulse"
+        )
+        .textContent=
+        total.toFixed(2)
+        +" N·s";
+
+
+    document
+        .getElementById(
+            "netImpulseValue"
+        )
+        .textContent=
+        total.toFixed(2)
+        +" N·s";
+
+
+    document
+        .getElementById(
+            "momentumChange"
+        )
+        .textContent=
+        total.toFixed(2)
+        +" kg·m/s";
+
+}
+
+
+/* =====================================================
+   Plugin تظليل الدفع
+===================================================== */
+
+const impulsePlugin={
+
+    id:"impulseAreas",
+
+
+    beforeDatasetsDraw(chart){
+
+        const ctx=
+            chart.ctx;
+
+
+        const xScale=
+            chart.scales.x;
+
+
+        const yScale=
+            chart.scales.y;
+
+
+        const area=
+            chart.chartArea;
+
+
+        if(!area)
+            return;
+
+
+        const zeroY=
+            yScale.getPixelForValue(0);
+
+
+        ctx.save();
+
+
+        /* محور السينات */
+
+        ctx.beginPath();
+
+        ctx.moveTo(
+            area.left,
+            zeroY
+        );
+
+        ctx.lineTo(
+            area.right,
+            zeroY
+        );
+
+        ctx.strokeStyle="#111";
+
+        ctx.lineWidth=4;
+
+        ctx.stroke();
+
+
+        /* المساحات */
+
+        for(
+            let i=0;
+            i<points.length-1;
+            i++
+        ){
+
+            const p1=points[i];
+
+            const p2=points[i+1];
+
+
+            const x1=
+                xScale
+                .getPixelForValue(
+                    p1.t
+                );
+
+
+            const x2=
+                xScale
+                .getPixelForValue(
+                    p2.t
+                );
+
+
+            const y1=
+                yScale
+                .getPixelForValue(
+                    p1.F
+                );
+
+
+            const y2=
+                yScale
+                .getPixelForValue(
+                    p2.F
+                );
+
+
+            /* موجب */
+
+            if(
+                p1.F>=0 &&
+                p2.F>=0
+            ){
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    x1,
+                    zeroY
+                );
+
+                ctx.lineTo(
+                    x1,
+                    y1
+                );
+
+                ctx.lineTo(
+                    x2,
+                    y2
+                );
+
+                ctx.lineTo(
+                    x2,
+                    zeroY
+                );
+
+                ctx.closePath();
+
+                ctx.fillStyle=
+                    "rgba(30,180,80,.28)";
+
+                ctx.fill();
+
+            }
+
+
+            /* سالب */
+
+            else if(
+                p1.F<=0 &&
+                p2.F<=0
+            ){
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    x1,
+                    zeroY
+                );
+
+                ctx.lineTo(
+                    x1,
+                    y1
+                );
+
+                ctx.lineTo(
+                    x2,
+                    y2
+                );
+
+                ctx.lineTo(
+                    x2,
+                    zeroY
+                );
+
+                ctx.closePath();
+
+                ctx.fillStyle=
+                    "rgba(220,40,40,.28)";
+
+                ctx.fill();
+
+            }
+
+
+            /* عبور المحور */
+
+            else{
+
+                const ratio=
+                    Math.abs(p1.F)/
+                    (
+                        Math.abs(p1.F)+
+                        Math.abs(p2.F)
+                    );
+
+
+                const crossT=
+                    p1.t+
+                    ratio*
+                    (p2.t-p1.t);
+
+
+                const crossX=
+                    xScale
+                    .getPixelForValue(
+                        crossT
+                    );
+
+
+                /* الجزء الأول */
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    x1,
+                    zeroY
+                );
+
+                ctx.lineTo(
+                    x1,
+                    y1
+                );
+
+                ctx.lineTo(
+                    crossX,
+                    zeroY
+                );
+
+                ctx.closePath();
+
+
+                ctx.fillStyle=
+                    p1.F>0
+                    ?
+                    "rgba(30,180,80,.28)"
+                    :
+                    "rgba(220,40,40,.28)";
+
+                ctx.fill();
+
+
+                /* الجزء الثاني */
+
+                ctx.beginPath();
+
+                ctx.moveTo(
+                    crossX,
+                    zeroY
+                );
+
+                ctx.lineTo(
+                    x2,
+                    y2
+                );
+
+                ctx.lineTo(
+                    x2,
+                    zeroY
+                );
+
+                ctx.closePath();
+
+
+                ctx.fillStyle=
+                    p2.F>0
+                    ?
+                    "rgba(30,180,80,.28)"
+                    :
+                    "rgba(220,40,40,.28)";
+
+                ctx.fill();
+
+            }
+
+        }
+
+
+        ctx.restore();
+
+    }
+
+};
+
+
+Chart.register(
+    impulsePlugin
+);
+
+
+/* =====================================================
+   رسم القوة
+===================================================== */
+
+const forceCanvas=
+    document.getElementById(
+        "forceChart"
+    );
+
+
+let forceChart=
+    new Chart(
+        forceCanvas,
+        {
+
+            type:"line",
+
+
+            data:{
+
+                datasets:[
+
+                    {
+
+                        label:
+                            "القوة F(t)",
+
+                        data:[],
+
+                        borderColor:
+                            "#1769aa",
+
+                        borderWidth:4,
+
+                        pointRadius:9,
+
+                        pointHoverRadius:12,
+
+                        pointBackgroundColor:
+                            "#1769aa",
+
+                        pointBorderColor:
+                            "#fff",
+
+                        pointBorderWidth:2,
+
+                        tension:0
+
+                    },
+
+
+                    {
+
+                        label:
+                            "اللحظة الحالية",
+
+                        data:[],
+
+                        showLine:false,
+
+                        pointRadius:8,
+
+                        pointBackgroundColor:
+                            "#111",
+
+                        pointBorderColor:
+                            "#fff",
+
+                        pointBorderWidth:2
+
+                    }
+
+                ]
+
+            },
+
+
+            options:{
+
+                responsive:true,
+
+                maintainAspectRatio:false,
+
+                animation:false,
+
+
+                scales:{
+
+                    x:{
+
+                        type:"linear",
+
+                        min:0,
+
+                        max:duration,
+
+                        title:{
+
+                            display:true,
+
+                            text:
+                                "الزمن t (s)",
+
+                            font:{
+                                size:17,
+                                weight:"bold"
+                            }
+
+                        },
+
+                        grid:{
+                            color:
+                                "rgba(0,0,0,.10)"
+                        }
+
+                    },
+
+
+                    y:{
+
+                        title:{
+
+                            display:true,
+
+                            text:
+                                "القوة F (N)",
+
+                            font:{
+                                size:17,
+                                weight:"bold"
+                            }
+
+                        },
+
+                        grid:{
+                            color:
+                                "rgba(0,0,0,.10)"
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   منحنى السرعة
+===================================================== */
+
+const velocityCanvas=
+    document.getElementById(
+        "velocityChart"
+    );
+
+
+let velocityHistory=[];
+
+
+let velocityChart=
+    new Chart(
+        velocityCanvas,
+        {
+
+            type:"line",
+
+
+            data:{
+
+                datasets:[{
+
+                    label:
+                        "السرعة v(t)",
+
+                    data:
+                        velocityHistory,
+
+                    borderColor:
+                        "#7a3db8",
+
+                    borderWidth:3,
+
+                    pointRadius:0,
+
+                    tension:.08
+
+                }]
+
+            },
+
+
+            options:{
+
+                responsive:true,
+
+                maintainAspectRatio:false,
+
+                animation:false,
+
+
+                scales:{
+
+                    x:{
+
+                        type:"linear",
+
+                        min:0,
+
+                        max:duration,
+
+                        title:{
+
+                            display:true,
+
+                            text:
+                                "الزمن t (s)"
+
+                        }
+
+                    },
+
+
+                    y:{
+
+                        title:{
+
+                            display:true,
+
+                            text:
+                                "السرعة v (m/s)"
+
+                        }
+
+                    }
+
+                }
+
+            }
+
+        }
+    );
+
+
+/* =====================================================
+   تحديث الرسم
+===================================================== */
+
+function updateForceChart(){
+
+    points.sort(
+        (a,b)=>a.t-b.t
+    );
+
+
+    forceChart
+        .data
+        .datasets[0]
+        .data=
+        points.map(
+            p=>({
+                x:p.t,
+                y:p.F
+            })
+        );
+
+
+    forceChart
+        .options
+        .scales
+        .x
+        .max=
+        duration;
+
+
+    forceChart.update(
+        "none"
+    );
+
+
+    updatePointsTable();
+
+    calculateImpulse();
+
+    updateCurrentMarker();
+
+}
+
+
+/* =====================================================
+   جدول النقاط
+===================================================== */
+
+function updatePointsTable(){
+
+    const table=
+        document.getElementById(
+            "pointsTable"
+        );
+
+
+    table.innerHTML="";
+
+
+    points.forEach(
+        (p,index)=>{
+
+            const row=
+                document.createElement(
+                    "tr"
+                );
+
+
+            row.innerHTML=`
+
+                <td>
+                    ${index+1}
+                </td>
+
+                <td>
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        value="${p.t}"
+                        onchange="
+                            editTime(
+                                ${index},
+                                this.value
+                            )
+                        "
+                    >
+
+                </td>
+
+                <td>
+
+                    <input
+                        type="number"
+                        step="0.1"
+                        value="${p.F}"
+                        onchange="
+                            editForce(
+                                ${index},
+                                this.value
+                            )
+                        "
+                    >
+
+                </td>
+
+                <td>
+
+                    <button
+                        class="delete"
+                        onclick="
+                            deletePoint(
+                                ${index}
+                            )
+                        "
+                    >
+
+                        حذف
+
+                    </button>
+
+                </td>
+
+            `;
+
+
+            table.appendChild(row);
+
+        }
+    );
+
+}
+
+
+/* =====================================================
+   تعديل الزمن
+===================================================== */
+
+function editTime(index,value){
+
+    let t=
+        Number(value);
+
+
+    if(!Number.isFinite(t))
+        return;
+
+
+    t=
+        Math.max(
+            0,
+            Math.min(
+                duration,
+                t
+            )
+        );
+
+
+    points[index].t=t;
+
+
+    points.sort(
+        (a,b)=>a.t-b.t
+    );
+
+
+    updateForceChart();
+
+}
+
+
+/* =====================================================
+   تعديل القوة
+===================================================== */
+
+function editForce(index,value){
+
+    const F=
+        Number(value);
+
+
+    if(!Number.isFinite(F))
+        return;
+
+
+    points[index].F=F;
+
+
+    updateForceChart();
+
+}
+
+
+/* =====================================================
+   حذف نقطة
+===================================================== */
+
+function deletePoint(index){
+
+    if(points.length<=2){
+
+        alert(
+            "يجب أن تبقى نقطتان على الأقل."
+        );
+
+        return;
+
+    }
+
+
+    points.splice(
+        index,
+        1
+    );
+
+
+    updateForceChart();
+
+}
+
+
+/* =====================================================
+   إضافة نقطة بالنقر
+===================================================== */
+
+forceCanvas.addEventListener(
+    "click",
+    function(event){
+
+        const rect=
+            forceCanvas
+            .getBoundingClientRect();
+
+
+        const x=
+            event.clientX-
+            rect.left;
+
+
+        const y=
+            event.clientY-
+            rect.top;
+
+
+        const area=
+            forceChart.chartArea;
+
+
+        if(
+            x<area.left ||
+            x>area.right ||
+            y<area.top ||
+            y>area.bottom
+        )
+            return;
+
+
+        const t=
+            forceChart
+            .scales
+            .x
+            .getValueForPixel(x);
+
+
+        const F=
+            forceChart
+            .scales
+            .y
+            .getValueForPixel(y);
+
+
+        points.push({
+
+            t:
+                Math.max(
+                    0,
+                    Math.min(
+                        duration,
+                        t
+                    )
+                ),
+
+            F:F
+
+        });
+
+
+        points.sort(
+            (a,b)=>a.t-b.t
+        );
+
+
+        updateForceChart();
+
+    }
+);
+
+
+/* =====================================================
+   سحب النقاط
+===================================================== */
+
+let draggingIndex=-1;
+
+
+forceCanvas.addEventListener(
+    "mousedown",
+    function(event){
+
+        const rect=
+            forceCanvas
+            .getBoundingClientRect();
+
+
+        const x=
+            event.clientX-
+            rect.left;
+
+
+        const y=
+            event.clientY-
+            rect.top;
+
+
+        let nearest=-1;
+
+        let distance=Infinity;
+
+
+        points.forEach(
+            (p,index)=>{
+
+                const px=
+                    forceChart
+                    .scales
+                    .x
+                    .getPixelForValue(
+                        p.t
+                    );
+
+
+                const py=
+                    forceChart
+                    .scales
+                    .y
+                    .getPixelForValue(
+                        p.F
+                    );
+
+
+                const d=
+                    Math.hypot(
+                        x-px,
+                        y-py
+                    );
+
+
+                if(d<distance){
+
+                    distance=d;
+
+                    nearest=index;
+
+                }
+
+            }
+        );
+
+
+        if(
+            nearest>=0 &&
+            distance<25
+        ){
+
+            draggingIndex=
+                nearest;
+
+            forceCanvas.style.cursor=
+                "grabbing";
+
+        }
+
+    }
+);
+
+
+forceCanvas.addEventListener(
+    "mousemove",
+    function(event){
+
+        if(draggingIndex<0)
+            return;
+
+
+        const rect=
+            forceCanvas
+            .getBoundingClientRect();
+
+
+        const x=
+            event.clientX-
+            rect.left;
+
+
+        const y=
+            event.clientY-
+            rect.top;
+
+
+        let t=
+            forceChart
+            .scales
+            .x
+            .getValueForPixel(x);
+
+
+        let F=
+            forceChart
+            .scales
+            .y
+            .getValueForPixel(y);
+
+
+        t=
+            Math.max(
+                0,
+                Math.min(
+                    duration,
+                    t
+                )
+            );
+
+
+        F=
+            Math.round(
+                F*10
+            )/10;
+
+
+        points[
+            draggingIndex
+        ].t=t;
+
+
+        points[
+            draggingIndex
+        ].F=F;
+
+
+        points.sort(
+            (a,b)=>a.t-b.t
+        );
+
+
+        updateForceChart();
+
+    }
+);
+
+
+window.addEventListener(
+    "mouseup",
+    function(){
+
+        draggingIndex=-1;
+
+        forceCanvas.style.cursor=
+            "default";
+
+    }
+);
+
+
+/* =====================================================
+   الحذف بزر الفأرة الأيمن
+===================================================== */
+
+forceCanvas.addEventListener(
+    "contextmenu",
+    function(event){
+
+        event.preventDefault();
+
+
+        const rect=
+            forceCanvas
+            .getBoundingClientRect();
+
+
+        const x=
+            event.clientX-
+            rect.left;
+
+
+        const y=
+            event.clientY-
+            rect.top;
+
+
+        let nearest=-1;
+
+        let distance=Infinity;
+
+
+        points.forEach(
+            (p,index)=>{
+
+                const px=
+                    forceChart
+                    .scales
+                    .x
+                    .getPixelForValue(
+                        p.t
+                    );
+
+
+                const py=
+                    forceChart
+                    .scales
+                    .y
+                    .getPixelForValue(
+                        p.F
+                    );
+
+
+                const d=
+                    Math.hypot(
+                        x-px,
+                        y-py
+                    );
+
+
+                if(d<distance){
+
+                    distance=d;
+
+                    nearest=index;
+
+                }
+
+            }
+        );
+
+
+        if(
+            nearest>=0 &&
+            distance<30 &&
+            points.length>2
+        ){
+
+            points.splice(
+                nearest,
+                1
+            );
+
+
+            updateForceChart();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   إضافة نقطة بزر
+===================================================== */
+
+document
+.getElementById(
+    "addPointButton"
+)
+.addEventListener(
+    "click",
+    function(){
+
+        let t=
+            duration/2;
+
+
+        points.push({
+
+            t:t,
+
+            F:0
+
+        });
+
+
+        points.sort(
+            (a,b)=>a.t-b.t
+        );
+
+
+        updateForceChart();
+
+    }
+);
+
+
+/* =====================================================
+   إعادة المنحنى
+===================================================== */
+
+document
+.getElementById(
+    "defaultCurveButton"
+)
+.addEventListener(
+    "click",
+    function(){
+
+        points=
+            JSON.parse(
+                JSON.stringify(
+                    defaultPoints
+                )
+            );
+
+
+        updateForceChart();
+
+    }
+);
+
+
+/* =====================================================
+   الكتلة
+===================================================== */
+
+document
+.getElementById("mass")
+.addEventListener(
+    "input",
+    function(){
+
+        mass=
+            Number(this.value);
+
+
+        document
+        .getElementById(
+            "massValue"
+        )
+        .textContent=
+            mass.toFixed(1);
+
+    }
+);
+
+
+/* =====================================================
+   السرعة الابتدائية
+===================================================== */
+
+document
+.getElementById(
+    "initialVelocity"
+)
+.addEventListener(
+    "input",
+    function(){
+
+        initialVelocity=
+            Number(this.value);
+
+
+        document
+        .getElementById(
+            "velocityValue"
+        )
+        .textContent=
+            initialVelocity.toFixed(1);
+
+
+        if(!running){
+
+            velocity=
+                initialVelocity;
+
+
+            document
+            .getElementById(
+                "currentVelocityValue"
+            )
+            .textContent=
+                velocity.toFixed(2)
+                +" m/s";
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   مدة المحاكاة
+===================================================== */
+
+document
+.getElementById("duration")
+.addEventListener(
+    "input",
+    function(){
+
+        duration=
+            Number(this.value);
+
+
+        document
+        .getElementById(
+            "durationValue"
+        )
+        .textContent=
+            duration;
+
+
+        points.forEach(
+            p=>{
+
+                if(p.t>duration)
+                    p.t=duration;
+
+            }
+        );
+
+
+        forceChart
+        .options
+        .scales
+        .x
+        .max=
+            duration;
+
+
+        velocityChart
+        .options
+        .scales
+        .x
+        .max=
+            duration;
+
+
+        updateForceChart();
+
+    }
+);
+
+
+/* =====================================================
+   سرعة المحاكاة
+===================================================== */
+
+document
+.getElementById(
+    "simulationSpeed"
+)
+.addEventListener(
+    "input",
+    function(){
+
+        simulationSpeed=
+            Number(this.value);
+
+
+        document
+        .getElementById(
+            "speedValue"
+        )
+        .textContent=
+            simulationSpeed.toFixed(1);
+
+    }
+);
+
+
+/* =====================================================
+   مؤشر الزمن الحالي
+===================================================== */
+
+function updateCurrentMarker(){
+
+    const F=
+        forceAt(time);
+
+
+    forceChart
+    .data
+    .datasets[1]
+    .data=[{
+
+        x:time,
+
+        y:F
+
+    }];
+
+
+    forceChart.update(
+        "none"
+    );
+
+}
+
+
+/* =====================================================
+   تشغيل
+===================================================== */
+
+document
+.getElementById(
+    "startButton"
+)
+.addEventListener(
+    "click",
+    function(){
+
+        if(time>=duration)
+            resetSimulation();
+
+
+        running=true;
+
+        lastTimestamp=null;
+
+
+        requestAnimationFrame(
+            animate
+        );
+
+    }
+);
+
+
+/* =====================================================
+   إيقاف
+===================================================== */
+
+document
+.getElementById(
+    "pauseButton"
+)
+.addEventListener(
+    "click",
+    function(){
+
+        running=false;
+
+    }
+);
+
+
+/* =====================================================
+   المحاكاة
+===================================================== */
+
+function animate(timestamp){
+
+    if(!running)
+        return;
+
+
+    if(lastTimestamp===null){
+
+        lastTimestamp=
+            timestamp;
+
+
+        requestAnimationFrame(
+            animate
+        );
+
+
+        return;
+
+    }
+
+
+    let dt=
+        (timestamp-lastTimestamp)/
+        1000;
+
+
+    lastTimestamp=
+        timestamp;
+
+
+    dt*=
+        simulationSpeed;
+
+
+    if(dt>.04)
+        dt=.04;
+
+
+    if(time<duration){
+
+        const F=
+            forceAt(time);
+
+
+        const acceleration=
+            F/mass;
+
+
+        velocity+=
+            acceleration*dt;
+
+
+        position+=
+            velocity*dt;
+
+
+        time+=dt;
+
+
+        velocityHistory.push({
+
+            x:time,
+
+            y:velocity
+
+        });
+
+
+        if(
+            velocityHistory.length>1500
+        ){
+
+            velocityHistory.shift();
+
+        }
+
+
+        velocityChart.update(
+            "none"
+        );
+
+
+        updateSimulationData();
+
+        updateCurrentMarker();
+
+        drawMotion();
+
+
+        requestAnimationFrame(
+            animate
+        );
+
+    }
+
+    else{
+
+        running=false;
+
+        time=duration;
+
+        updateSimulationData();
+
+        updateCurrentMarker();
+
+        drawMotion();
+
+    }
+
+}
+
+
+/* =====================================================
+   بيانات المحاكاة
+===================================================== */
+
+function updateSimulationData(){
+
+    const F=
+        forceAt(time);
+
+
+    const acceleration=
+        F/mass;
+
+
+    document
+    .getElementById(
+        "timeValue"
+    )
+    .textContent=
+        time.toFixed(2)
+        +" s";
+
+
+    document
+    .getElementById(
+        "forceValue"
+    )
+    .textContent=
+        F.toFixed(2)
+        +" N";
+
+
+    document
+    .getElementById(
+        "accelerationValue"
+    )
+    .textContent=
+        acceleration.toFixed(2)
+        +" m/s²";
+
+
+    document
+    .getElementById(
+        "currentVelocityValue"
+    )
+    .textContent=
+        velocity.toFixed(2)
+        +" m/s";
+
+
+    document
+    .getElementById(
+        "positionValue"
+    )
+    .textContent=
+        position.toFixed(2)
+        +" m";
+
+
+    calculateImpulse();
+
+}
+
+
+/* =====================================================
+   إعادة ضبط
+===================================================== */
+
+function resetSimulation(){
+
+    running=false;
+
+    time=0;
+
+    velocity=
+        initialVelocity;
+
+    position=0;
+
+    velocityHistory.length=0;
+
+
+    velocityChart.update(
+        "none"
+    );
+
+
+    updateSimulationData();
+
+    updateCurrentMarker();
+
+    drawMotion();
+
+}
+
+
+/* =====================================================
+   رسم الجسم
+===================================================== */
+
+const motionCanvas=
+    document.getElementById(
+        "motionCanvas"
+    );
+
+
+const motionCtx=
+    motionCanvas.getContext(
+        "2d"
+    );
+
+
+function drawMotion(){
+
+    const width=
+        motionCanvas.clientWidth;
+
+
+    const height=
+        motionCanvas.clientHeight;
+
+
+    motionCanvas.width=
+        width;
+
+
+    motionCanvas.height=
+        height;
+
+
+    motionCtx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+
+    const groundY=
+        height*.70;
+
+
+    /* السطح */
+
+    motionCtx.fillStyle=
+        "#d9dee5";
+
+
+    motionCtx.fillRect(
+        0,
+        groundY,
+        width,
+        8
+    );
+
+
+    /* الجسم */
+
+    let x=
+        width/2+
+        position*25;
+
+
+    x=
+        Math.max(
+            35,
+            Math.min(
+                width-35,
+                x
+            )
+        );
+
+
+    const y=
+        groundY-30;
+
+
+    motionCtx.beginPath();
+
+
+    motionCtx.arc(
+        x,
+        y,
+        30,
+        0,
+        Math.PI*2
+    );
+
+
+    motionCtx.fillStyle=
+        "#2878c8";
+
+
+    motionCtx.fill();
+
+
+    motionCtx.strokeStyle=
+        "#123b63";
+
+
+    motionCtx.lineWidth=3;
+
+
+    motionCtx.stroke();
+
+
+    /* سهم القوة */
+
+    const F=
+        forceAt(time);
+
+
+    const arrow=
+        Math.max(
+            -140,
+            Math.min(
+                140,
+                F*2
+            )
+        );
+
+
+    motionCtx.beginPath();
+
+
+    motionCtx.moveTo(
+        x,
+        y
+    );
+
+
+    motionCtx.lineTo(
+        x+arrow,
+        y
+    );
+
+
+    motionCtx.strokeStyle=
+        "#d62828";
+
+
+    motionCtx.lineWidth=5;
+
+
+    motionCtx.stroke();
+
+
+    const direction=
+        arrow>=0?1:-1;
+
+
+    motionCtx.beginPath();
+
+
+    motionCtx.moveTo(
+        x+arrow,
+        y
+    );
+
+
+    motionCtx.lineTo(
+        x+arrow-
+        direction*15,
+        y-10
+    );
+
+
+    motionCtx.lineTo(
+        x+arrow-
+        direction*15,
+        y+10
+    );
+
+
+    motionCtx.closePath();
+
+
+    motionCtx.fillStyle=
+        "#d62828";
+
+
+    motionCtx.fill();
+
+
+    /* المعلومات */
+
+    motionCtx.textAlign=
+        "center";
+
+
+    motionCtx.font=
+        "bold 17px Arial";
+
+
+    motionCtx.fillStyle=
+        "#b51f1f";
+
+
+    motionCtx.fillText(
+        "F = "+
+        F.toFixed(1)+
+        " N",
+        x,
+        y-55
+    );
+
+
+    motionCtx.font=
+        "16px Arial";
+
+
+    motionCtx.fillStyle=
+        "#172033";
+
+
+    motionCtx.fillText(
+        "m = "+
+        mass.toFixed(1)+
+        " kg",
+        x,
+        y+58
+    );
+
+}
+
+
+/* =====================================================
+   التشغيل الأولي
+===================================================== */
+
+updateForceChart();
+
+updateSimulationData();
+
+drawMotion();
+
+</script>
+
+</body>
+
+</html>

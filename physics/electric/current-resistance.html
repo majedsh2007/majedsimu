@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>التيار الكهربائي والمقاومة | الأستاذ ماجد شلالدة</title>
+<style>
+:root{
+  --bg:#0b1329;--main:#1c2541;--sub:#3a506b;
+  --text:#fff;--green:#06d6a0;--cyan:#00b4d8;--gold:#ffd166;
+}
+*{box-sizing:border-box}
+body{
+  font-family:system-ui,-apple-system,sans-serif;
+  background:var(--bg);color:var(--text);margin:0;padding:20px;
+  min-height:100vh;position:relative;
+}
+.watermark{
+  position:fixed;inset:0;background-image:url('logo.png');
+  background-size:420px;background-position:center;background-repeat:no-repeat;
+  opacity:0;pointer-events:none;z-index:0;
+}
+.container{max-width:1200px;margin:auto;position:relative;z-index:1}
+.top-nav{display:flex;justify-content:flex-start;gap:10px;margin-bottom:20px}
+.top-nav a{
+  text-decoration:none;color:#fff;background:#263d62;
+  border:1px solid #4a6588;padding:9px 15px;border-radius:10px;
+  font-weight:700;transition:.2s
+}
+.top-nav a:hover{border-color:var(--cyan);transform:translateY(-2px)}
+header{text-align:center;margin-bottom:45px}
+.main-logo{
+  width:130px;height:130px;object-fit:cover;border-radius:50%;
+  box-shadow:0 4px 25px rgba(0,180,216,.2)
+}
+h1{font-size:2.6rem;color:var(--green);margin:14px 0 5px}
+.teacher{font-size:1.25rem;color:var(--gold);font-weight:bold;margin:5px}
+.phone{direction:ltr;color:#a5a5a5;font-size:1.05rem}
+header p{color:#d0d7e2;font-size:1.1rem;max-width:680px;margin:15px auto;line-height:1.8}
+.main-section{
+  background:var(--main);border-radius:16px;padding:30px;
+  margin-bottom:35px;border:1px solid rgba(255,255,255,.05);
+  box-shadow:0 10px 30px rgba(0,0,0,.3)
+}
+.section-title{
+  color:var(--green);font-size:1.8rem;margin:0 0 25px;
+  padding-bottom:10px;border-bottom:3px solid var(--green);
+  display:inline-block
+}
+.sub-grid{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:20px
+}
+.sub-card{
+  background:var(--sub);border-radius:12px;padding:22px;
+  text-decoration:none;color:#fff;min-height:150px;
+  border:1px solid transparent;display:flex;flex-direction:column;
+  justify-content:center;transition:.25s
+}
+.sub-card:hover{
+  transform:translateY(-6px);border-color:var(--green);
+  box-shadow:0 10px 24px rgba(0,0,0,.35)
+}
+.sub-card h3{margin:0 0 10px;font-size:1.3rem;color:#fff}
+.sub-card p{margin:0;color:#ddd;line-height:1.7;font-size:.96rem}
+.icon{font-size:2rem;margin-bottom:10px}
+footer{text-align:center;color:#8797ad;margin-top:25px}
+@media(max-width:600px){
+  body{padding:12px}
+  h1{font-size:2rem}
+  .main-section{padding:20px}
+}
+</style>
+    <script src="../auth.js"></script>
+</head>
+<body>
+<div class="watermark"></div>
+
+<div class="container">
+  <div class="top-nav">
+    <a href="../index.html">⌂ الصفحة الرئيسية</a>
+  </div>
+
+  <header>
+    <img src="logo.png" alt="شعار الأستاذ ماجد شلالدة" class="main-logo">
+    <h1>التيار الكهربائي والمقاومة</h1>
+    <div class="teacher">إعداد: الأستاذ ماجد شلالدة</div>
+    <div class="phone">0599870176</div>
+    <p>اختر المحاكاة التي تريد تشغيلها لاستكشاف مفاهيم التيار الكهربائي والمقاومة بصورة تفاعلية.</p>
+  </header>
+
+  <main>
+    <section class="main-section">
+      <h2 class="section-title">⚡ المحاكاة التفاعلية</h2>
+
+      <div class="sub-grid">
+        <a href="ohm.html" class="sub-card">
+          <div class="icon">🔋</div>
+          <h3>قانون أوم</h3>
+          <p>استكشاف العلاقة بين فرق الجهد والتيار والمقاومة.</p>
+        </a>
+
+        <a href="current_intensity.html" class="sub-card">
+          <div class="icon">⚡</div>
+          <h3>شدة التيار الكهربائي</h3>
+          <p>دراسة حركة الشحنات والعلاقة بين الشحنة والزمن وشدة التيار.</p>
+        </a>
+
+        <a href="resistance.html" class="sub-card">
+          <div class="icon">🔩</div>
+          <h3>المقاومة الكهربائية</h3>
+          <p>دراسة مفهوم المقاومة والعوامل المؤثرة في قيمتها.</p>
+        </a>
+
+        <a href="free_electrons.html" class="sub-card">
+          <div class="icon">⚛️</div>
+          <h3>حركة الإلكترونات الحرة في موصل فلزي</h3>
+          <p>محاكاة حركة الإلكترونات الحرة داخل الموصل الفلزي وتوضيح اتجاه حركتها العشوائية والانجرافية عند مرور التيار الكهربائي.</p>
+        </a>
+
+        <a href="power.html" class="sub-card">
+          <div class="icon">💡</div>
+          <h3>القدرة الكهربائية</h3>
+          <p>دراسة العلاقة بين القدرة وفرق الجهد وشدة التيار والمقاومة.</p>
+        </a>
+
+        <a href="temperature_resistance.html" class="sub-card">
+          <div class="icon">🌡️</div>
+          <h3>المقاومة ودرجة الحرارة</h3>
+          <p>محاكاة تغير مقاومة الموصل عند تغير درجة حرارته.</p>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer>المنصة التفاعلية للمحاكاة الفيزيائية — الأستاذ ماجد شلالدة</footer>
+</div>
+</body>
+</html>

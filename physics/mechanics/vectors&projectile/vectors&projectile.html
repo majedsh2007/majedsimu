@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المتجهات والحركة في بعدين | الأستاذ ماجد شلالدة</title>
+<style>
+:root{--bg:#0b1329;--card:#1c2541;--sub:#243b55;--text:#fff;--cyan:#00b4d8;--green:#06d6a0;--gold:#ffd166;--purple:#b5179e}
+*{box-sizing:border-box} body{margin:0;padding:20px;min-height:100vh;background:var(--bg);color:var(--text);font-family:system-ui,-apple-system,sans-serif}
+.watermark{position:fixed;inset:0;background-image:url('logo.png');background-size:180px;opacity:.02;pointer-events:none;z-index:0;transform:rotate(-15deg) scale(1.2)}
+.container{max-width:1200px;margin:auto;position:relative;z-index:1}
+header{text-align:center;position:relative;margin-bottom:40px}
+.back{position:absolute;right:10px;top:10px;text-decoration:none;color:var(--cyan);background:var(--card);border:1px solid var(--cyan);padding:10px 20px;border-radius:9px;font-weight:bold}
+.back:hover{background:var(--cyan);color:var(--bg)}
+header h1{margin:45px 0 10px;color:var(--cyan);font-size:2.5rem}
+header p{color:#bbb;font-size:1.1rem}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:24px}
+.card{background:var(--card);border-radius:15px;padding:25px;text-decoration:none;color:var(--text);border:1px solid rgba(255,255,255,.06);box-shadow:0 8px 25px rgba(0,0,0,.3);text-align:center;transition:.25s;display:flex;flex-direction:column;align-items:center}
+.card:hover{transform:translateY(-7px);border-color:var(--cyan);box-shadow:0 12px 30px rgba(0,0,0,.5)}
+.icon{font-size:3.4rem;margin-bottom:12px}.card h2{margin:0 0 12px;color:var(--cyan);font-size:1.5rem}.card p{margin:0;color:#ddd;line-height:1.7;font-size:1rem}
+.tag{margin-top:16px;padding:6px 14px;border-radius:20px;background:rgba(0,180,216,.12);color:var(--gold);font-weight:bold}
+.feature{grid-column:1/-1;background:linear-gradient(135deg,#1c2541,#243b55);border:1px solid rgba(6,214,160,.35)}
+.feature h2{color:var(--green)}
+.dropdown-wrap{width:100%;max-width:460px;margin-top:14px;position:relative}.dropdown-btn{width:100%;border:1px solid var(--cyan);background:var(--sub);color:#fff;padding:13px 16px;border-radius:10px;font-size:1rem;font-weight:bold;cursor:pointer;font-family:inherit;display:flex;justify-content:space-between;align-items:center;transition:.2s}.dropdown-btn:hover{background:var(--cyan);color:var(--bg)}.dropdown-btn .arrow{transition:.2s}.dropdown-btn.active .arrow{transform:rotate(180deg)}.dropdown-menu{display:none;position:absolute;top:calc(100% + 7px);right:0;left:0;background:#18243d;border:1px solid rgba(0,180,216,.5);border-radius:12px;padding:8px;box-shadow:0 15px 35px rgba(0,0,0,.55);z-index:20}.dropdown-menu.show{display:block;animation:drop .18s ease-out}.dropdown-menu a{display:flex;align-items:center;gap:12px;text-decoration:none;color:#fff;padding:12px;border-radius:9px;text-align:right;transition:.2s}.dropdown-menu a:hover{background:rgba(0,180,216,.15);transform:translateX(-3px)}.dropdown-menu .mi{font-size:1.6rem;width:38px;text-align:center}.dropdown-menu strong{display:block;color:var(--cyan);margin-bottom:3px}.dropdown-menu small{display:block;color:#ccc;line-height:1.4}.menu-card{position:relative;overflow:visible}.menu-card .tag{margin-top:18px}@keyframes drop{from{opacity:0;transform:translateY(-5px)}to{opacity:1;transform:translateY(0)}}.relations{grid-column:1/-1;padding:22px;border-radius:15px;background:var(--card);text-align:center;border:1px solid rgba(255,209,102,.3)}
+.relations h2{color:var(--gold);margin-top:0}.formula{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:12px}.formula div{background:rgba(255,255,255,.06);padding:14px;border-radius:10px;font-weight:bold;font-size:1.1rem}
+footer{text-align:center;color:#aaa;margin-top:35px;font-size:.95rem}
+@media(max-width:600px){body{padding:12px}header h1{font-size:2rem}.back{position:static;display:inline-block;margin-bottom:15px}}
+</style>
+    <script src="../../auth.js"></script>
+</head>
+<body>
+<div class="watermark"></div>
+<div class="container">
+<header>
+<a href="../../index.html" class="back">🏠 العودة للرئيسية</a>
+<h1>🧭 المتجهات والحركة في بعدين</h1>
+<p>إعداد الأستاذ ماجد شلالدة — استكشف المتجهات والحركة في المستوى بصورة تفاعلية</p>
+</header>
+
+<main class="grid">
+<div class="card menu-card">
+<div class="icon">🧭</div><h2>المتجهات</h2>
+<p>اختر نوع المتجهات التي تريد استكشافها.</p>
+<div class="dropdown-wrap">
+<button class="dropdown-btn" type="button" onclick="toggleMenu('vectorsMenu',this)">اختر الموضوع <span class="arrow">▼</span></button>
+<div id="vectorsMenu" class="dropdown-menu">
+<a href="vectors_2d.html"><span class="mi">↗️</span><span><strong>المتجهات في بعدين</strong><small>تمثيل المتجهات وتحليلها إلى مركبات x و y.</small></span></a>
+<a href="vectors_3d.html"><span class="mi">🧭</span><span><strong>المتجهات في ثلاث أبعاد</strong><small>تمثيل المتجهات وتحليلها على المحاور x و y و z.</small></span></a>
+</div></div>
+<span class="tag">A⃗ = Aₓ i + Aᵧ j + A_z k</span>
+</div>
+
+<div class="card menu-card">
+<div class="icon">🏀</div><h2>المقذوفات</h2>
+<p>اختر نوع حركة المقذوف التي تريد استكشافها.</p>
+<div class="dropdown-wrap">
+<button class="dropdown-btn" type="button" onclick="toggleMenu('projectileMenu',this)">اختر الموضوع <span class="arrow">▼</span></button>
+<div id="projectileMenu" class="dropdown-menu">
+<a href="projectile_2d.html"><span class="mi">🏀</span><span><strong>المقذوفات بزاوية</strong><small>دراسة المدى والزمن والارتفاع الأقصى والمسار.</small></span></a>
+<a href="projectile_3d.html"><span class="mi">🌐</span><span><strong>المقذوفات بزاوية في ثلاث أبعاد</strong><small>دراسة حركة المقذوف في الفضاء على المحاور الثلاثة.</small></span></a>
+</div></div>
+<span class="tag">x = v₀ cosθ · t &nbsp; | &nbsp; y = v₀ sinθ · t − ½gt²</span>
+</div>
+</main>
+<footer>إعداد وتطوير الأستاذ ماجد شلالدة</footer>
+</div>
+<script>
+function toggleMenu(id,btn){
+ const menu=document.getElementById(id);
+ const was=menu.classList.contains('show');
+ document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('show'));
+ document.querySelectorAll('.dropdown-btn').forEach(b=>b.classList.remove('active'));
+ if(!was){menu.classList.add('show');btn.classList.add('active');}
+}
+document.addEventListener('click',e=>{
+ if(!e.target.closest('.dropdown-wrap')){
+  document.querySelectorAll('.dropdown-menu').forEach(m=>m.classList.remove('show'));
+  document.querySelectorAll('.dropdown-btn').forEach(b=>b.classList.remove('active'));
+ }
+});
+</script>
+</body>
+</html>
