@@ -3,8 +3,8 @@ main = "worker.js"
 compatibility_date = "2026-09-03"
 
 [vars]
-USERNAME = "CHANGE_ME"
-PASSWORD_HASH = "CHANGE_ME"
+
+
 
 [[durable_objects.bindings]]
 name = "AUTH_SESSION"
