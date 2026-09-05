@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>المجال المغناطيسي للتيار الكهربائي | الأستاذ ماجد شلالدة</title>
+<style>
+:root{
+    --bg-color:#0b1329;
+    --main-card-bg:#1c2541;
+    --sub-card-bg:#3a506b;
+    --text-color:#fff;
+    --accent-cyan:#00b4d8;
+    --accent-orange:#f77f00;
+}
+*{box-sizing:border-box}
+body{
+    font-family:system-ui,-apple-system,"Segoe UI",sans-serif;
+    background:var(--bg-color);
+    color:var(--text-color);
+    margin:0;
+    padding:20px;
+    min-height:100vh;
+    position:relative;
+}
+.watermark-overlay{
+    position:fixed;
+    inset:0;
+    background-image:url('logo.png');
+    background-size:180px;
+    background-repeat:repeat;
+    opacity:.025;
+    pointer-events:none;
+    z-index:0;
+    transform:rotate(-15deg) scale(1.2);
+}
+.container{
+    max-width:1200px;
+    margin:0 auto;
+    position:relative;
+    z-index:1;
+}
+header{
+    text-align:center;
+    margin-bottom:40px;
+    position:relative;
+}
+.back-btn{
+    position:absolute;
+    top:10px;
+    right:10px;
+    background:var(--main-card-bg);
+    color:var(--accent-cyan);
+    text-decoration:none;
+    padding:10px 20px;
+    border-radius:8px;
+    font-weight:bold;
+    border:1px solid var(--accent-cyan);
+    transition:.2s ease;
+}
+.back-btn:hover{
+    background:var(--accent-cyan);
+    color:var(--bg-color);
+    transform:translateY(-2px);
+}
+header h1{
+    font-size:2.5rem;
+    color:var(--accent-orange);
+    margin:40px 0 10px;
+}
+header p{
+    color:#a5a5a5;
+    font-size:1.1rem;
+    margin:0;
+}
+.magnetic-grid{
+    display:grid;
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr));
+    gap:25px;
+    margin-top:30px;
+}
+.magnetic-card{
+    background:var(--main-card-bg);
+    border-radius:14px;
+    padding:25px;
+    text-decoration:none;
+    color:var(--text-color);
+    border:1px solid rgba(255,255,255,.05);
+    box-shadow:0 8px 25px rgba(0,0,0,.3);
+    transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    text-align:center;
+    min-height:265px;
+}
+.magnetic-card:hover{
+    transform:translateY(-8px);
+    border-color:var(--accent-orange);
+    box-shadow:0 12px 30px rgba(0,0,0,.5);
+}
+.icon{
+    width:105px;
+    height:75px;
+    margin-bottom:15px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    position:relative;
+    font-size:3.4rem;
+}
+.wire{
+    width:78px;
+    height:8px;
+    background:#b9c3cc;
+    border-radius:10px;
+    position:relative;
+}
+.wire:after,.wire:before{
+    content:"";
+    position:absolute;
+    width:24px;
+    height:24px;
+    border:3px solid var(--accent-cyan);
+    border-radius:50%;
+    top:50%;
+    transform:translateY(-50%);
+}
+.wire:before{right:22px}
+.wire:after{left:22px}
+.coil{
+    width:90px;
+    height:55px;
+    border:5px solid var(--accent-cyan);
+    border-left-color:transparent;
+    border-right-color:transparent;
+    border-radius:50%;
+    position:relative;
+}
+.coil:after{
+    content:"";
+    position:absolute;
+    inset:7px 12px;
+    border:4px solid var(--accent-orange);
+    border-left-color:transparent;
+    border-right-color:transparent;
+    border-radius:50%;
+}
+.magnet{
+    font-size:3.2rem;
+    filter:drop-shadow(0 4px 5px rgba(0,0,0,.35));
+}
+.compass{
+    font-size:3.5rem;
+}
+.right-hand{
+    font-size:3.6rem;
+}
+.field-lines{
+    width:105px;
+    height:70px;
+    position:relative;
+}
+.field-lines span{
+    position:absolute;
+    left:50%;
+    top:50%;
+    transform:translate(-50%,-50%);
+    border:2px solid var(--accent-cyan);
+    border-radius:50%;
+}
+.field-lines span:nth-child(1){width:30px;height:30px}
+.field-lines span:nth-child(2){width:55px;height:55px}
+.field-lines span:nth-child(3){width:82px;height:82px}
+.magnetic-card h2{
+    margin:0 0 12px;
+    font-size:1.55rem;
+    color:var(--accent-cyan);
+}
+.magnetic-card p{
+    margin:0;
+    font-size:1rem;
+    color:#cdcdcd;
+    line-height:1.65;
+}
+.tag{
+    background:rgba(247,127,0,.2);
+    color:var(--accent-orange);
+    padding:4px 12px;
+    border-radius:20px;
+    font-size:.85rem;
+    margin-top:15px;
+    font-weight:bold;
+}
+.topic-select{width:100%;margin-top:14px;padding:12px 14px;border-radius:10px;border:1px solid var(--accent-cyan);background:#101a35;color:#fff;font-size:.95rem;font-family:inherit;cursor:pointer;outline:none;}
+.topic-select:focus{box-shadow:0 0 0 3px rgba(0,180,216,.18)}
+.topic-select option{background:#101a35;color:#fff}
+@media(max-width:600px){
+    body{padding:12px}
+    header h1{font-size:2rem;margin-top:70px}
+    .back-btn{position:relative;top:auto;right:auto;display:inline-block}
+    .magnetic-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+
+<body>
+<div class="watermark-overlay"></div>
+
+<div class="container">
+<header>
+    <a href="../../index.html" class="back-btn">⬅ العودة للرئيسية</a>
+    <h1>🧲 المجال المغناطيسي للتيار الكهربائي</h1>
+    <p>إعداد وتطوير الأستاذ ماجد شلالدة (0599870176) - اختر الموضوع لبدء التجربة</p>
+</header>
+
+<main class="magnetic-grid">
+
+    <div class="magnetic-card" style="cursor:default;">
+        <div class="icon field-lines">
+            <span></span><span></span><span></span>
+        </div>
+        <h2>المجال المغناطيسي للسلك المستقيم اللانهئي</h2>
+        <p>اختر من القائمة الموضوع الذي تريد استكشافه.</p>
+        <select class="topic-select" onchange="if(this.value) window.location.href=this.value;">
+            <option value="">اختر الموضوع ▼</option>
+            <option value="straight_wire_magnetic_field.html">خطوط المجال المغناطيسي في محيط السلك المستقيم اللانهائي</option>
+            <option value="open_hand_rule_1.html">قاعدة الكف المفتوح – نموذج 1</option>
+            <option value="open_hand_rule_2.html">قاعدة الكف المفتوح – نموذج 2</option>
+        </select>
+        <span class="tag">سلك مستقيم</span>
+    </div>
+
+    <a href="circular_loop_magnetic_field.html" class="magnetic-card">
+        <div class="icon coil"></div>
+        <h2>المجال المغناطيسي لملف دائري</h2>
+        <p>دراسة المجال المغناطيسي الناتج عن مرور تيار في ملف دائري وتأثير اتجاه التيار في اتجاه المجال.</p>
+        <span class="tag">ملف دائري</span>
+    </a>
+
+    <a href="solenoid_magnetic_field.html" class="magnetic-card">
+        <div class="icon magnet">🧲</div>
+        <h2>المجال المغناطيسي للملف الحلزوني</h2>
+        <p>محاكاة المجال داخل وحول الملف  الحلزوني مع توضيح اتجاه خطوط المجال والقطبين المغناطيسيين.</p>
+        <span class="tag">ملف لولبي</span>
+    </a>
+
+    <a href="current_distance_field.html" class="magnetic-card">
+        <div class="icon">⚡📏</div>
+        <h2>تأثير شدة التيار والمسافة</h2>
+        <p>محاكاة تفاعلية لدراسة تغير شدة المجال المغناطيسي عند تغيير شدة التيار والمسافة عن الموصل.</p>
+        <span class="tag">عوامل مؤثرة</span>
+    </a>
+
+    <a href="magnetic_field_lines.html" class="magnetic-card">
+        <div class="icon">🧲〰️</div>
+        <h2>خطوط المجال المغناطيسي</h2>
+        <p>استكشاف شكل خطوط المجال المغناطيسي واتجاهها حول الموصلات والملفات التي يمر فيها تيار كهربائي.</p>
+        <span class="tag">خطوط المجال</span>
+    </a>
+
+</main>
+</div>
+</body>
+</html>
